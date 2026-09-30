@@ -22,7 +22,9 @@ const anchor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta name="robots" content="noindex" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#121212" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -34,8 +36,8 @@ const anchor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
     <a class="skip" href="#main">Hopp til hovedinnhold</a>
     <header class="site-header">
       <div class="wrap header-inner">
-        <a href="/" class="wordmark" aria-label="Mediaveien, til forsiden">
-          <span class="wordmark-dot" aria-hidden="true"></span>Mediaveien
+        <a href="/" class="logo">
+          <img src="/logo-horisontal.webp" alt="Mediaveien" width="1287" height="249" />
         </a>
         <nav aria-label="Hovedmeny">
           <ul class="nav">
@@ -52,10 +54,10 @@ const anchor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
       <slot />
     </main>
 
-    <footer class="site-footer" id="kontakt-footer">
+    <footer class="site-footer pattern">
       <div class="wrap footer-grid">
         <div>
-          <p class="wordmark wordmark-light"><span class="wordmark-dot" aria-hidden="true"></span>Mediaveien</p>
+          <a href="/" class="logo logo-footer"><img src="/logo-horisontal.webp" alt="Mediaveien" width="1287" height="249" loading="lazy" /></a>
           <p class="muted-light">Vi ser frem til å hjelpe deg med synlighet og vekst.</p>
           {home.contactEmail && <p><a href={`mailto:${home.contactEmail}`}>{home.contactEmail}</a></p>}
         </div>

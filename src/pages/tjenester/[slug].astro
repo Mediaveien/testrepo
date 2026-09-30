@@ -13,7 +13,7 @@ const { services } = await getContent();
 const others = services.filter((s) => s._id !== service._id);
 ---
 <Layout title={`${service.title} | Mediaveien`} description={service.seoDescription ?? service.excerpt}>
-  <section class="page-hero">
+  <section class="page-hero pattern">
     <div class="wrap">
       <nav class="crumbs" aria-label="Brødsmulesti">
         <a href="/">Hjem</a> / <a href="/#tjenester">Tjenester</a> / <span aria-current="page">{service.title}</span>
@@ -30,7 +30,7 @@ const others = services.filter((s) => s._id !== service._id);
         <p><a class="btn" href="/#kontakt">Ta kontakt om {service.title.toLowerCase()}</a></p>
       </div>
       {service.highlights && service.highlights.length > 0 && (
-        <aside class="highlights">
+        <aside class="highlights pattern">
           <h2>Dette får du</h2>
           <ul>{service.highlights.map((h) => <li>{h}</li>)}</ul>
         </aside>

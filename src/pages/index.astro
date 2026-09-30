@@ -56,7 +56,7 @@ const heroSrc = img(home.heroImage, 2000);
     </div>
   </section>
 
-  <section class="section band">
+  <section class="section band pattern">
     <div class="wrap band-inner">
       <h2>{home.regionTitle}</h2>
       {home.regionText && <p>{home.regionText}</p>}
@@ -72,9 +72,11 @@ const heroSrc = img(home.heroImage, 2000);
         {team.map((p) => (
           <div class="person">
             {p.image && <img src={img(p.image, 500, 625)} alt={p.name} loading="lazy" width="500" height="625" />}
-            <h3>{p.name}</h3>
-            {p.role && <p>{p.role}</p>}
-            {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
+            <div class="person-body">
+              <h3>{p.name}</h3>
+              {p.role && <p>{p.role}</p>}
+              {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
+            </div>
           </div>
         ))}
       </div>
@@ -82,7 +84,7 @@ const heroSrc = img(home.heroImage, 2000);
   </section>
 
   {testimonials.length > 0 && (
-    <section class="section" id="kundeomtaler" style="padding-top: 0">
+    <section class="section section-alt" id="kundeomtaler">
       <div class="wrap">
         <div class="section-head">
           <div>
@@ -109,9 +111,9 @@ const heroSrc = img(home.heroImage, 2000);
     </section>
   )}
 
-  <section class="section" id="kontakt" style="padding-top: 0">
+  <section class="section" id="kontakt">
     <div class="wrap">
-      <div class="cta">
+      <div class="cta pattern">
         <div>
           <h2>{home.ctaTitle}</h2>
           {home.ctaText && <p>{home.ctaText}</p>}
