@@ -56,8 +56,8 @@ const CONTENT_QUERY = `{
   "home": *[_id == "homePage"][0]{
     ..., heroImage{asset->{_id, url, metadata{lqip}}}, heroVideo{asset->{url}}
   },
-  "services": *[_type == "service" && defined(slug.current)] | order(order asc, title asc){
-    _id, title, "slug": slug.current, excerpt, intro, body, highlights, seoDescription
+  "services": *[_type == "service" && defined(coalesce(slug.current, slug))] | order(order asc, title asc){
+    _id, title, "slug": coalesce(slug.current, slug), excerpt, intro, body, highlights, seoDescription
   },
   "team": *[_type == "teamMember"] | order(order asc){
     _id, name, role, email, phone, image{asset->{_id, url}}
