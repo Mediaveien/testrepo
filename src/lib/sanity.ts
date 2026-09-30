@@ -35,6 +35,7 @@ export interface Content {
     heroTitle?: string;
     heroText?: string;
     heroImage?: SanityImage;
+    heroVideo?: { asset?: { url: string } };
     servicesTitle?: string;
     servicesText?: string;
     aboutTitle?: string;
@@ -53,7 +54,7 @@ export interface Content {
 
 const CONTENT_QUERY = `{
   "home": *[_id == "homePage"][0]{
-    ..., heroImage{asset->{_id, url, metadata{lqip}}}
+    ..., heroImage{asset->{_id, url, metadata{lqip}}}, heroVideo{asset->{url}}
   },
   "services": *[_type == "service" && defined(slug.current)] | order(order asc, title asc){
     _id, title, "slug": slug.current, excerpt, intro, body, highlights, seoDescription

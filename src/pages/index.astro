@@ -5,23 +5,45 @@ import { getContent, img } from '../lib/sanity';
 const { home, services, team, testimonials } = await getContent();
 const pad = (n: number) => String(n).padStart(2, '0');
 const heroSrc = img(home.heroImage, 2000);
+const heroVideo = home.heroVideo?.asset?.url;
 ---
 <Layout
   title="Mediaveien | Digitalt markedsføringsbyrå i Alta"
   description="Vi er Mediaveien, markedsføringsbyrået i Nord-Norge. Vi hjelper nordnorske bedrifter med å nå riktig folk, til riktig tid."
 >
   <section class="hero">
-    {heroSrc && (
+    {(heroSrc || heroVideo) && (
       <div class="hero-media">
-        <img
-          src={heroSrc}
-          srcset={`${img(home.heroImage, 900)} 900w, ${img(home.heroImage, 1400)} 1400w, ${heroSrc} 2000w`}
-          sizes="100vw"
-          alt=""
-          fetchpriority="high"
-          style={home.heroImage?.asset?.metadata?.lqip ? `background: url(${home.heroImage.asset.metadata.lqip}) center/cover` : undefined}
-        />
+        {heroSrc && (
+          <img
+            src={heroSrc}
+            srcset={`${img(home.heroImage, 900)} 900w, ${img(home.heroImage, 1400)} 1400w, ${heroSrc} 2000w`}
+            sizes="100vw"
+            alt=""
+            fetchpriority="high"
+            style={home.heroImage?.asset?.metadata?.lqip ? `background: url(${home.heroImage.asset.metadata.lqip}) center/cover` : undefined}
+          />
+        )}
+        {heroVideo && (
+          <video
+            class="hero-video"
+            src={heroVideo}
+            poster={img(home.heroImage, 1400)}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-hidden="true"
+          ></video>
+        )}
       </div>
+    )}
+    {heroVideo && (
+      <button class="video-toggle" type="button" aria-label="Pause bakgrunnsvideo" aria-pressed="false">
+        <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" /></svg>
+        <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </button>
     )}
     <div class="wrap hero-inner">
       {home.heroEyebrow && <p class="eyebrow">{home.heroEyebrow}</p>}
@@ -123,3 +145,18 @@ const heroSrc = img(home.heroImage, 2000);
     </div>
   </section>
 </Layout>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('.hero-video');
+  const toggle = document.querySelector<HTMLButtonElement>('.video-toggle');
+  if (video && toggle) {
+    const set = (paused: boolean) => {
+      paused ? video.pause() : video.play().catch(() => {});
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.setAttribute('aria-label', paused ? 'Spill av bakgrunnsvideo' : 'Pause bakgrunnsvideo');
+      toggle.classList.toggle('is-paused', paused);
+    };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) set(true);
+    toggle.addEventListener('click', () => set(!video.paused));
+  }
+</script>
