@@ -28,13 +28,7 @@ Siden kjører på http://localhost:4321 (lagt inn som CORS-origin i Sanity).
 
 ## Deploy til Netlify
 
-Siden er statisk og henter innholdet fra Sanity når Netlify bygger. Fra denne mappen:
-
-```bash
-npx -y @netlify/mcp@latest --site-id 43fd8d56-51cf-4ea1-9fc4-5efed2f800a9 --proxy-path "<proxy-path fra Netlify MCP>"
-```
-
-Eller med Netlify CLI: `npx netlify deploy --build --prod`
+Netlify-prosjektet er koblet til `main` i dette repoet. Hver push til `main` bygger og publiserer siden. Innholdet hentes fra Sanity under bygget.
 
 ### Oppdatere siden når innhold publiseres
 
