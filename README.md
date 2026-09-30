@@ -2,35 +2,52 @@
 
 Markedsføringsside for Mediaveien bygget med Astro, med innhold fra Sanity og hosting på Netlify.
 
+- **Nettside:** https://mediaveien-demo.netlify.app
 - **Studio:** https://mediaveien-demo.sanity.studio
 - **Sanity-prosjekt:** `1bzgbepc`, datasett `production` (offentlig)
 - **Netlify-prosjekt:** `mediaveien-demo`
+
+```
+/            Astro-nettsiden (bygges av Netlify)
+/studio      Sanity Studio (deployes til sanity.studio)
+```
 
 ## Innhold i Sanity
 
 | Type | Brukes til |
 | --- | --- |
+| Forside | Hero (tekst, video, bilde), seksjonstekster og kontaktinfo |
 | Tjeneste | Kortene på forsiden og hver side under `/tjenester/[slug]` |
-| Forside | Hero, overskrifter og tekster på forsiden |
 | Ansatt | «Hvem er vi»-seksjonen |
 | Kundeomtale | Kundeomtalene |
 
-Nye tjenester dukker opp automatisk ved neste bygg. Rekkefølgen styres med feltet «Rekkefølge».
+Forsiden finnes i ett eksemplar og ligger øverst i Studio-menyen.
 
-## Kjøre lokalt
+## Nettsiden
 
 ```bash
 npm install
-npm run dev
+npm run dev     # http://localhost:4321
 ```
 
-Siden kjører på http://localhost:4321 (lagt inn som CORS-origin i Sanity).
+Hver push til `main` bygges og publiseres av Netlify. En webhook i Sanity starter også et nytt bygg når innhold publiseres.
 
-## Deploy til Netlify
+## Studio
 
-Netlify-prosjektet er koblet til `main` i dette repoet. Hver push til `main` bygger og publiserer siden. Innholdet hentes fra Sanity under bygget.
+Skjemaet ligger i `studio/schemaTypes/`, én fil per type.
 
-### Oppdatere siden når innhold publiseres
+```bash
+cd studio
+npm install
+npm run dev     # http://localhost:3333
+npm run deploy  # publiserer Studio og skjema
+```
 
-1. Netlify: Project configuration → Build & deploy → Build hooks → legg til en hook og kopier URL-en.
-2. Sanity: sanity.io/manage → prosjektet → API → Webhooks → ny webhook med build hook-URL-en, filter `_type in ["service", "homePage", "teamMember", "testimonial"]`.
+### Legge til et felt
+
+1. Legg til en `defineField(...)` i riktig fil i `studio/schemaTypes/`.
+2. Kjør `npm run deploy` i `studio/`.
+3. Hent feltet i spørringen i `src/lib/sanity.ts` og vis det i riktig side under `src/pages/`.
+4. Push til `main`.
+
+Et nytt felt vises ikke på nettsiden før steg 3 er gjort.
