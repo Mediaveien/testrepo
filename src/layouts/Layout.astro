@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import { getContent, studioUrl } from '../lib/sanity';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+const { home, services } = await getContent();
+const path = Astro.url.pathname;
+const isHome = path === '/' || path === '';
+const anchor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
+---
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Hopp til hovedinnhold</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a href="/" class="wordmark" aria-label="Mediaveien, til forsiden">
+          <span class="wordmark-dot" aria-hidden="true"></span>Mediaveien
+        </a>
+        <nav aria-label="Hovedmeny">
+          <ul class="nav">
+            <li><a href={anchor('tjenester')}>Tjenester</a></li>
+            <li><a href={anchor('om-oss')}>Hvem er vi</a></li>
+            <li><a href={anchor('kundeomtaler')}>Kundeomtaler</a></li>
+            <li><a class="btn btn-small" href={anchor('kontakt')}>Ta kontakt</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer" id="kontakt-footer">
+      <div class="wrap footer-grid">
+        <div>
+          <p class="wordmark wordmark-light"><span class="wordmark-dot" aria-hidden="true"></span>Mediaveien</p>
+          <p class="muted-light">Vi ser frem til å hjelpe deg med synlighet og vekst.</p>
+          {home.contactEmail && <p><a href={`mailto:${home.contactEmail}`}>{home.contactEmail}</a></p>}
+        </div>
+        <div>
+          <h2 class="footer-h">Tjenester</h2>
+          <ul class="footer-list">
+            {services.map((s) => <li><a href={`/tjenester/${s.slug}/`}>{s.title}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">Besøksadresse</h2>
+          <p class="pre muted-light">{home.address}</p>
+        </div>
+      </div>
+      <div class="wrap footer-bottom">
+        <span>Demo bygget med Astro og Sanity, hostet på Netlify.</span>
+        <a href={studioUrl} rel="noopener">Rediger innhold i Sanity Studio →</a>
+      </div>
+    </footer>
+  </body>
+</html>

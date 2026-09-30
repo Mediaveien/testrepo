@@ -1,0 +1,49 @@
+---
+import { PortableText } from 'astro-portabletext';
+import Layout from '../../layouts/Layout.astro';
+import { getContent, type Service } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const { services } = await getContent();
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props as { service: Service };
+const { services } = await getContent();
+const others = services.filter((s) => s._id !== service._id);
+---
+<Layout title={`${service.title} | Mediaveien`} description={service.seoDescription ?? service.excerpt}>
+  <section class="page-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Brødsmulesti">
+        <a href="/">Hjem</a> / <a href="/#tjenester">Tjenester</a> / <span aria-current="page">{service.title}</span>
+      </nav>
+      <h1>{service.title}</h1>
+      {service.intro && <p class="lead">{service.intro}</p>}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap service-layout">
+      <div class="prose">
+        {service.body && <PortableText value={service.body} />}
+        <p><a class="btn" href="/#kontakt">Ta kontakt om {service.title.toLowerCase()}</a></p>
+      </div>
+      {service.highlights && service.highlights.length > 0 && (
+        <aside class="highlights">
+          <h2>Dette får du</h2>
+          <ul>{service.highlights.map((h) => <li>{h}</li>)}</ul>
+        </aside>
+      )}
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0">
+    <div class="wrap">
+      <p class="eyebrow">Andre tjenester</p>
+      <div class="other-services">
+        {others.map((s) => <a class="chip" href={`/tjenester/${s.slug}/`}>{s.title}</a>)}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getContent, img } from '../lib/sanity';
+
+const { home, services, team, testimonials } = await getContent();
+const pad = (n: number) => String(n).padStart(2, '0');
+const heroSrc = img(home.heroImage, 2000);
+---
+<Layout
+  title="Mediaveien | Digitalt markedsføringsbyrå i Alta"
+  description="Vi er Mediaveien, markedsføringsbyrået i Nord-Norge. Vi hjelper nordnorske bedrifter med å nå riktig folk, til riktig tid."
+>
+  <section class="hero">
+    {heroSrc && (
+      <div class="hero-media">
+        <img
+          src={heroSrc}
+          srcset={`${img(home.heroImage, 900)} 900w, ${img(home.heroImage, 1400)} 1400w, ${heroSrc} 2000w`}
+          sizes="100vw"
+          alt=""
+          fetchpriority="high"
+          style={home.heroImage?.asset?.metadata?.lqip ? `background: url(${home.heroImage.asset.metadata.lqip}) center/cover` : undefined}
+        />
+      </div>
+    )}
+    <div class="wrap hero-inner">
+      {home.heroEyebrow && <p class="eyebrow">{home.heroEyebrow}</p>}
+      <h1>{home.heroTitle}</h1>
+      {home.heroText && <p class="hero-text">{home.heroText}</p>}
+      <div class="hero-actions">
+        <a class="btn" href="#tjenester">Våre tjenester</a>
+        <a class="btn btn-ghost" href="#kontakt">Ta kontakt</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tjenester">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Våre tjenester</p>
+          <h2>{home.servicesTitle}</h2>
+        </div>
+        {home.servicesText && <p>{home.servicesText}</p>}
+      </div>
+      <div class="services">
+        {services.map((s, i) => (
+          <a class="service-card" href={`/tjenester/${s.slug}/`}>
+            <span class="service-num">{pad(i + 1)}</span>
+            <h3>{s.title}</h3>
+            {s.excerpt && <p>{s.excerpt}</p>}
+            <span class="service-more">Les mer <span aria-hidden="true">→</span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="wrap band-inner">
+      <h2>{home.regionTitle}</h2>
+      {home.regionText && <p>{home.regionText}</p>}
+    </div>
+  </section>
+
+  <section class="section" id="om-oss">
+    <div class="wrap">
+      <p class="eyebrow">Hvem er vi</p>
+      <h2>{home.aboutTitle}</h2>
+      {home.aboutText && <p class="about-text">{home.aboutText}</p>}
+      <div class="team">
+        {team.map((p) => (
+          <div class="person">
+            {p.image && <img src={img(p.image, 500, 625)} alt={p.name} loading="lazy" width="500" height="625" />}
+            <h3>{p.name}</h3>
+            {p.role && <p>{p.role}</p>}
+            {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="section" id="kundeomtaler" style="padding-top: 0">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Kundeomtaler</p>
+            <h2>Hva sier kundene våre?</h2>
+          </div>
+          <p>Vi har samarbeidet med over 150 kunder i privat og offentlig sektor.</p>
+        </div>
+        <div class="quotes">
+          {testimonials.map((t) => (
+            <figure class="quote">
+              <blockquote>{t.quote}</blockquote>
+              <figcaption>
+                {t.image && <img src={img(t.image, 96, 96)} alt="" loading="lazy" width="48" height="48" />}
+                <div>
+                  <strong>{t.name}</strong>
+                  <span>{t.role}</span>
+                </div>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" id="kontakt" style="padding-top: 0">
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h2>{home.ctaTitle}</h2>
+          {home.ctaText && <p>{home.ctaText}</p>}
+        </div>
+        {home.contactEmail && <a class="btn" href={`mailto:${home.contactEmail}`}>Send oss en e-post →</a>}
+      </div>
+    </div>
+  </section>
+</Layout>
